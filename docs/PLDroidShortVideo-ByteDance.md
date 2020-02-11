@@ -23,7 +23,7 @@ PLDroidShortVideo-ByteDance 是七牛推出的一款适用于 Android 平台的�
 
 ## 3.3 下载和导入 SDK
 
-PLDroidShortVideo-ByteDance 包含两部分内容，分别为 PLDroidShortVideo（短视频 SDK） 和 ByteDancePlugin（特效插件 SDK），其中 **PLDroidShortVideo SDK 需要 3.1.2 版本以上**。SDK 主要包含 Demo 代码、SDK jar 包，以及 SDK 依赖的动态库文件，说明如下：
+PLDroidShortVideo-ByteDance 包含两部分内容，分别为 PLDroidShortVideo（短视频 SDK） 和 ByteDancePlugin（特效插件 SDK），其中 **PLDroidShortVideo SDK 需要 3.1.2 版本以上**。SDK 主要包含 Demo 代码、SDK jar 包，以及 SDK 依赖的动态库文件，以 armeabi-v7a 架构为例，说明如下：
 
 | 文件名称                           | 功能      | 大小    | 备注          |
 | ------------------------------ | ------- | ----- | ----------- |

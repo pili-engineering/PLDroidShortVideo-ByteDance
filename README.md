@@ -24,7 +24,7 @@ PLDroidShortVideo-ByteDance 是七牛推出的一款适用于 Android 平台的�
 
 ## 3 使用方法
 
-请参考开发者中心文档：[PLDroidShortVideo-ByteDance](https://github.com/pili-engineering/PLDroidShortVideo-ByteDance/docs/PLDroidShortVideo-ByteDance.md)
+请参考开发者中心文档：[PLDroidShortVideo-ByteDance](https://github.com/pili-engineering/PLDroidShortVideo-ByteDance/blob/master/docs/PLDroidShortVideo-ByteDance.md)
 
 ## 4 声明
 
