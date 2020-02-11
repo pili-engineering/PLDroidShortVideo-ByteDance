@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_launcher" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/icon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp"
+        android:text="正在加载特效素材。。。"
+        android:textColor="#aaaaaa"
+        android:textSize="18dp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/bt_start"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/btn_load_resources_selector"
+        android:enabled="false"
+        android:text="开始"
+        android:textColor="@android:color/white" />
+
+    <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
+        android:id="@+id/progress"
+        android:layout_width="200dp"
+        android:layout_height="1dp"
+        android:layout_alignBottom="@id/bt_start"
+        android:layout_centerHorizontal="true"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:spb_color="#FF0000"
+        app:spb_mirror_mode="false"
+        app:spb_progressiveStart_activated="true"
+        app:spb_progressiveStart_speed="1.5"
+        app:spb_progressiveStop_speed="3.4"
+        app:spb_reversed="false"
+        app:spb_sections_count="4"
+        app:spb_speed="2.0"
+        app:spb_stroke_separator_length="4dp"
+        app:spb_stroke_width="4dp" />
+</RelativeLayout>

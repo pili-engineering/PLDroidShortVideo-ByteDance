@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.opengl.GLSurfaceView
+        android:id="@+id/preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.qiniu.pili.droid.shortvideo.demo.view.FocusView
+        android:id="@+id/focus_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.qiniu.pili.droid.shortvideo.demo.view.SectionProgressBar
+        android:id="@+id/section_bar"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="6dp" />
+
+    <include layout="@layout/record_title" />
+
+    <include layout="@layout/record_side" />
+
+    <include layout="@layout/record_bottom" />
+
+    <com.qiniu.pili.droid.shortvideo.demo.view.RecordSpeedView
+        android:id="@+id/record_speed_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ll_record_bottom"
+        android:layout_marginBottom="30dp" />
+
+    <FrameLayout
+        android:id="@+id/fl_record_panel_container"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>
