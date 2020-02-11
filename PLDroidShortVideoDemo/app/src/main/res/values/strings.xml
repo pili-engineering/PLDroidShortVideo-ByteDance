@@ -1,0 +1,70 @@
+<resources>
+    <string name="app_name">七牛短视频</string>
+    <string name="upload">上传</string>
+    <string name="cancel_upload">取消上传</string>
+    <string name="if_edit_video">是否编辑视频</string>
+    <string name="dlg_yes">是</string>
+    <string name="dlg_no">否</string>
+
+    <string name="title_record">视频拍摄</string>
+    <string name="title_audio_record">音频录制</string>
+    <string name="title_compose">视频拼接</string>
+    <string name="title_image_compose">制作图片电影</string>
+    <string name="title_multiple_compose">图片视频混排</string>
+    <string name="title_screen_record">屏幕录制</string>
+    <string name="title_import_and_edit">素材导入编辑</string>
+    <string name="title_transcode">视频转码</string>
+    <string name="title_trim">视频剪辑</string>
+    <string name="title_gif">制作GIF动画</string>
+    <string name="title_show_gif">显示GIF动画</string>
+    <string name="title_start_compose">启动合成</string>
+    <string name="title_video_size">视频尺寸</string>
+    <string name="title_video_bitrate">视频码率</string>
+    <string name="title_audio_file_name">音频文件：</string>
+    <string name="title_add_image">添加图片</string>
+    <string name="title_add_music">添加音乐</string>
+    <string name="title_ar_effect">制作AR视频</string>
+    <string name="title_from_draft_box">草稿箱</string>
+    <string name="title_video_divide">视频分割</string>
+    <string name="title_transition_make">过场字幕</string>
+    <string name="title_mix_record">合拍</string>
+
+    <string name="dlg_delete_draft">确认删除草稿</string>
+
+    <string name="desc_duration">持续时间</string>
+    <string name="desc_transition_time">转场时间</string>
+    <string name="desc_ms">ms</string>
+    <string name="desc_paint_color">画笔颜色</string>
+    <string name="desc_paint_size">画笔大小</string>
+    <string name="desc_paint_undo">撤销</string>
+    <string name="desc_paint_clear">清除</string>
+    <string name="desc_image_tip">请选择所需的贴图！</string>
+    <string name="desc_compose_display_tip">展现方式：</string>
+    <string name="desc_compose_display_full">全屏</string>
+    <string name="desc_compose_display_fit">自适应</string>
+
+    <string name="ar_record">开始录制</string>
+    <string name="ar_stop">停止录制</string>
+    <string name="speed_super_slow">极慢"</string>
+    <string name="speed_slow">慢"</string>
+    <string name="speed_normal">正常"</string>
+    <string name="speed_fast">快"</string>
+    <string name="speed_super_fast">极快"</string>
+    <string name="speed_range">分段变速</string>
+
+    <string name="transition_maker_edit">编辑"</string>
+    <string name="transition_maker_confirm">确定"</string>
+    <string name="divide_delete_tip">双击片段可以删除"</string>
+    <string name="divide_add_tip">剪一段"</string>
+    <string name="divide_add_video">添加视频"</string>
+    <string name="divide_long_press_tip">长按缩略图排序"</string>
+    <string name="divide_compose">视频合成"</string>
+    <string name="divide_add_transition">添加过场字幕"</string>
+
+    <item name="selector_view" type="id"></item>
+    <item name="rect_view" type="id"></item>
+
+    <string name="tab_face_beautification">美颜</string>
+    <string name="tab_filter">滤镜</string>
+    <string name="tab_face_beauty_reshape">美形</string>
+</resources>

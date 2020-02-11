@@ -1,0 +1,41 @@
+{
+  "beauty": [
+    {
+      "fileName": "beauty_Android",
+      "iconName": "smooth.png",
+      "effectName": "磨皮",
+      "key": "smooth",
+      "defaultIntensity": 0.5
+    },
+    {
+      "fileName": "beauty_Android",
+      "iconName": "whiten.png",
+      "effectName": "美白",
+      "key": "whiten",
+      "defaultIntensity": 0.5
+    },
+    {
+      "fileName": "beauty_Android",
+      "iconName": "sharpen.png",
+      "effectName": "锐化",
+      "key": "sharp",
+      "defaultIntensity": 0.5
+    }
+  ],
+  "reshape": [
+    {
+      "fileName": "reshape",
+      "iconName": "cheek.png",
+      "effectName": "瘦脸",
+      "key": "Internal_Deform_Overall",
+      "defaultIntensity": 0.5
+    },
+    {
+      "fileName": "reshape",
+      "iconName": "eye.png",
+      "effectName": "大眼",
+      "key": "Internal_Deform_Eye",
+      "defaultIntensity": 0.5
+    }
+  ]
+}

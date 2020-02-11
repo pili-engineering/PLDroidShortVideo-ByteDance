@@ -1,0 +1,52 @@
+[
+  {
+    "fileName":"Filter_01_38",
+    "filterName": "柔白",
+    "defaultIntensity": 0.8
+  },
+  {
+    "fileName":"Filter_05_10",
+    "filterName": "洛丽塔",
+    "defaultIntensity": 0.8
+  },
+  {
+    "fileName":"Filter_06_03",
+    "filterName": "蜜桃",
+    "defaultIntensity": 0.8
+  },
+  {
+    "fileName":"Filter_09_19",
+    "filterName": "樱花",
+    "defaultIntensity": 0.8
+  },
+  {
+    "fileName":"Filter_10_11",
+    "filterName": "浅暖",
+    "defaultIntensity": 0.8
+  },
+  {
+    "fileName":"Filter_11_09",
+    "filterName": "物语",
+    "defaultIntensity": 0.8
+  },
+  {
+    "fileName":"Filter_16_13",
+    "filterName": "胶片",
+    "defaultIntensity": 0.8
+  },
+  {
+    "fileName":"Filter_18_18",
+    "filterName": "旧日",
+    "defaultIntensity": 0.8
+  },
+  {
+    "fileName":"Filter_20_05",
+    "filterName": "橘蓝调",
+    "defaultIntensity": 0.8
+  },
+  {
+    "fileName":"Filter_22_16",
+    "filterName": "黑白",
+    "defaultIntensity": 0.8
+  }
+]
