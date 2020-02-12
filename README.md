@@ -28,7 +28,7 @@ PLDroidShortVideo-ByteDance 是七牛推出的一款适用于 Android 平台的�
 
 ## 4 下载体验
 
-![示例 demo 下载](./docs/qrcode.png)
+![示例 demo 下载](./docs/images/qrcode.png)
 
 ## 5 声明
 
