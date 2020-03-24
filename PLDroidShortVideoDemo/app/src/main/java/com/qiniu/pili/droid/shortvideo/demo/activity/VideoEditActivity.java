@@ -36,6 +36,7 @@ import android.widget.TextView;
 
 import com.qiniu.bytedanceplugin.ByteDancePlugin;
 import com.qiniu.bytedanceplugin.effectsdk.BytedEffectConstants;
+import com.qiniu.bytedanceplugin.utils.ProcessType;
 import com.qiniu.pili.droid.shortvideo.PLBuiltinFilter;
 import com.qiniu.pili.droid.shortvideo.PLGifWatermarkSetting;
 import com.qiniu.pili.droid.shortvideo.PLImageView;
@@ -47,6 +48,7 @@ import com.qiniu.pili.droid.shortvideo.PLSpeedTimeRange;
 import com.qiniu.pili.droid.shortvideo.PLTextView;
 import com.qiniu.pili.droid.shortvideo.PLVideoEditSetting;
 import com.qiniu.pili.droid.shortvideo.PLVideoFilterListener;
+import com.qiniu.pili.droid.shortvideo.PLVideoPlayerListener;
 import com.qiniu.pili.droid.shortvideo.PLVideoSaveListener;
 import com.qiniu.pili.droid.shortvideo.PLWatermarkSetting;
 import com.qiniu.pili.droid.shortvideo.demo.R;
@@ -80,6 +82,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -166,6 +169,8 @@ public class VideoEditActivity extends AppCompatActivity implements PLVideoSaveL
     private float mMainMixAudioFileVolume = 1;
 
     private ByteDancePlugin mByteDancePlugin;
+    //将纹理转正所需要的处理
+    private List<ProcessType> mProcessTypes;
 
     public static void start(Activity activity, String mp4Path) {
         Intent intent = new Intent(activity, VideoEditActivity.class);
@@ -214,8 +219,10 @@ public class VideoEditActivity extends AppCompatActivity implements PLVideoSaveL
         initResources();
 
         mByteDancePlugin = new ByteDancePlugin(this, ByteDancePlugin.PluginType.edit, getExternalFilesDir("assets") + File.separator + "resource");
-        mByteDancePlugin.setComposerMode(1);
-        mShortVideoEditor.setEffectPlugin(mByteDancePlugin);
+        mByteDancePlugin.setComposerMode(BytedEffectConstants.ComposerMode.SHARE);
+        //短视频 SDK 回调的纹理是竖直镜像的，需要竖直镜像处理才能将其转正
+        mProcessTypes = new ArrayList<>();
+        mProcessTypes.add(ProcessType.FLIPPED_VERTICAL);
 
         mStickerViewGroup.post(new Runnable() {
             @Override
@@ -488,17 +495,17 @@ public class VideoEditActivity extends AppCompatActivity implements PLVideoSaveL
             mShortVideoEditor.startPlayback(new PLVideoFilterListener() {
                 @Override
                 public void onSurfaceCreated() {
-
+                    mByteDancePlugin.onSurfaceCreated();
                 }
 
                 @Override
                 public void onSurfaceChanged(int width, int height) {
-
+                    mByteDancePlugin.onSurfaceChanged(width, height);
                 }
 
                 @Override
                 public void onSurfaceDestroy() {
-
+                    mByteDancePlugin.onSurfaceDestroy();
                 }
 
                 @Override
@@ -519,7 +526,7 @@ public class VideoEditActivity extends AppCompatActivity implements PLVideoSaveL
                         }
                     });
 
-                    return texId;
+                    return mByteDancePlugin.onDrawFrame(texId, texWidth, texHeight, timestampNs, mProcessTypes, false);
                 }
             });
             mShortVideoEditorStatus = PLShortVideoEditorStatus.Playing;
@@ -1237,7 +1244,7 @@ public class VideoEditActivity extends AppCompatActivity implements PLVideoSaveL
                     mMainAudioFileAdded = true;
                 }
 
-                PLMixAudioFile audioFile = new PLMixAudioFile(selectedFilepath);
+                PLMixAudioFile audioFile = new PLMixAudioFile(Config.EDITED_FILE_PATH);
                 if (mAudioMixingFileCount == 0) {
                     ToastUtils.showShortMessage("添加第一个混音文件");
                     long firstMixingDurationMs = (mInputMp4FileDurationMs <= 5000) ? mInputMp4FileDurationMs : 5000;
@@ -1348,17 +1355,17 @@ public class VideoEditActivity extends AppCompatActivity implements PLVideoSaveL
         mShortVideoEditor.save(new PLVideoFilterListener() {
             @Override
             public void onSurfaceCreated() {
-
+                mByteDancePlugin.onSaveSurfaceCreated();
             }
 
             @Override
             public void onSurfaceChanged(int width, int height) {
-
+                mByteDancePlugin.onSaveSurfaceChanged(width, height);
             }
 
             @Override
             public void onSurfaceDestroy() {
-
+                mByteDancePlugin.onSaveSurfaceDestroy();
             }
 
             @Override
@@ -1371,7 +1378,7 @@ public class VideoEditActivity extends AppCompatActivity implements PLVideoSaveL
                     mSaveWatermarkSetting.setPosition(0.01f, 0.01f);
                 }
                 mShortVideoEditor.updateSaveWatermark(mIsUseWatermark ? mSaveWatermarkSetting : null);
-                return texId;
+                return mByteDancePlugin.onSaveFrame(texId, texWidth, texHeight, timestampNs, mProcessTypes, false);
             }
         });
     }

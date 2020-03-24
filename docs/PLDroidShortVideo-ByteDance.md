@@ -1,34 +1,29 @@
 # 1. 概述
-
 PLDroidShortVideo-ByteDance 是七牛推出的一款适用于 Android 平台的具有高级特效功能的短视频 SDK，提供了包括高级美颜、高级滤镜、动态贴纸、水印、断点录制、分段回删、视频编辑、混音特效、本地/云端存储在内的多种功能，支持高度定制以及二次开发。
 
 # 2. 阅读对象
-
 本文档为技术文档，需要阅读者：
 
 - 具有基本的 Android 开发能力
 - 准备接入七牛短视频
 
 #3. 开发准备
-
 ## 3.1 开发环境
-
 * Android Studio 开发工具，官方 [下载地址](http://developer.android.com/intl/zh-cn/sdk/index.html)
 * Android 官方开发 SDK，官方 [下载地址](https://developer.android.com/intl/zh-cn/sdk/index.html)
 
 ## 3.2 设备以及系统要求
 
 - 设备要求：搭载 Android 系统的设备
-- 系统要求：Android 4.3(API 18) 及其以上
+- 系统要求：Android 4.4(API 19) 及其以上
 
 ## 3.3 下载和导入 SDK
-
-PLDroidShortVideo-ByteDance 包含两部分内容，分别为 PLDroidShortVideo（短视频 SDK） 和 ByteDancePlugin（特效插件 SDK），其中 **PLDroidShortVideo SDK 需要 3.1.2 版本以上**。SDK 主要包含 Demo 代码、SDK jar 包，以及 SDK 依赖的动态库文件，以 armeabi-v7a 架构为例，说明如下：
+PLDroidShortVideo-ByteDance 包含两部分内容，分别为 PLDroidShortVideo（短视频 SDK） 和 ByteDancePlugin（特效插件 SDK）。SDK 主要包含 Demo 代码、SDK jar 包，以及 SDK 依赖的动态库文件，以 armeabi-v7a 架构为例，说明如下：
 
 | 文件名称                           | 功能      | 大小    | 备注          |
 | ------------------------------ | ------- | ----- | ----------- |
 | pldroid-shortvideo-x.y.z.jar   | 短视频 SDK 库   | 552KB | 必须依赖     |
-| ByteDancePlugin-x.y.z.jar      | 特效插件 SDK 库| 85KB | 必须依赖        |
+| ByteDancePlugin-x.y.z.jar      | 特效插件 SDK 库| 93KB | 必须依赖        |
 | libpldroid\_shortvideo_core.so | 短视频核心库  | 651KB | 必须依赖        |
 | libeffect.so                   | 特效插件核心库 | 11.6MB | 必须依赖       |
 | libeffect_proxy.so             | 特效插件接口层 | 84KB  | 必须依赖        |
@@ -39,7 +34,6 @@ PLDroidShortVideo-ByteDance 包含两部分内容，分别为 PLDroidShortVideo�
 | filters                        | 内置滤镜缩略图 | 12.5MB     | 可以根据需求删减    |
 
 ## 3.4 修改 build.gradle
-
 双击打开您的工程目录下的 `build.gradle`，确保已经添加了如下依赖（代码中的`x.y.z`为具体的版本号），如下所示：
 
 ```java
@@ -49,22 +43,17 @@ dependencies {
     implementation 'com.qiniu:qiniu-android-sdk:7.3.11'
 }
 ```
-**注意：PLDroidShortVideo SDK 版本必须为 3.1.2 以上。**
+**短视频 SDK 的任意版本都可以和 ByteDancePlugin v1.0.1 及以上的版本配合使用** 
 
 ## 3.5 修改代码混淆规则
-
 为 proguard-rules.pro 增加如下规则:
 
 ```java
--keep class com.amazing.**{*;}
--keep class com.bef.**{*;}
 -keep class com.qiniu.bytedanceplugin.**{*;}
--keep interface com.bef.**{*;}
 -keep class com.qiniu.pili.droid.**{*;}
 ```
 
 ## 3.6 添加相关权限
-
 在 app/src/main 目录中的 AndroidManifest.xml 中增加如下 `uses-permission` 声明：
 
 ```java
@@ -76,28 +65,25 @@ dependencies {
 <uses-permission android:name="android.permission.FLASHLIGHT" />
 ```
 ## 3.7 添加特效素材
-
 | 文件名称                           | 文件类型      | 大小    | 备注          |
 | ------------------------------ | ------- | ----- | ----------- |
-| ComposeMakeup.bundle           | 高级美颜、美型素材 | 380KB | 包含美白、磨皮、锐化、瘦脸、大眼 |
-| FilterResource.bundle          | 高级滤镜素材  |  1.9MB  | 包含 10 款滤镜 |
-| LicenseBag.bundle              | 授权文件   | 431字节  | 该包内有且只有一个文件，文件名内包含了所绑定的包名和授权的起止日期 |
-| ModelResource.bundle           | 模型文件  | 4.2MB  | 用于人脸识别、手势识别 |
-| StickerResource.bundle         | 动态贴纸素材 | 2.6MB | 包含 4 款动态贴纸 |
+| ComposeMakeup.bundle           | 高级美颜、美型素材 | 376KB | 包含美白、磨皮、锐化、瘦脸、大眼 |
+| FilterResource.bundle          | 高级滤镜素材  |  12.3MB  | 包含 48 款滤镜 |
+| LicenseBag.bundle              | 授权文件   | 426字节  | 该包内有且只有一个文件，文件名内包含了所绑定的包名和授权的起止日期 |
+| ModelResource.bundle           | 模型文件  | 5.5MB  | 用于人脸识别、手势识别 |
+| StickerResource.bundle         | 动态贴纸素材 | 39.9MB | 包含 20 款动态贴纸 |
 
 如用户需要更多款式的美颜、美型、滤镜、动态贴纸素材，可在特效君 APP 上选择，联系七牛商务咨询进行购买。
 
 # 4. 接口设计
-
 PLDroidShortVideo-ByteDance 包含两部分内容，分别为 PLDroidShortVideo（短视频 SDK） 和 ByteDancePlugin（特效插件 SDK），有关于短视频 SDK 的接口设计与使用请阅读[短视频 SDK 使用文档](https://developer.qiniu.com/pili/sdk/3734/android-short-video-sdk)，下面介绍特效插件 SDK 的接口设计：
 
 ### 4.1 创建特效插件对象
-
 ```java
-mByteDancePlugin = new ByteDancePlugin(this, pluginType, resourcePath);
+ByteDancePlugin mByteDancePlugin = new ByteDancePlugin(this, pluginType, resourcePath);
 ```
 参数 resourcePath 为资源文件的根路径，该路径需为手机本地文件路径，如果放在 assets 文件目录下，请自行拷贝至手机本地  
-参数 pluginType 为插件类型，此参数为一个枚举类型，如下所示：
+参数 pluginType 为插件类型，此参数为一个枚举类型，需要根据场景传入不同的参数，它的结构如下所示：
 
 ```java
 /**
@@ -116,7 +102,6 @@ public enum PluginType {
 ```
 
 ### 4.2 设置动态贴纸
-
 ```java
 /**
   * 开启或者关闭贴纸 如果 path 为空 关闭贴纸
@@ -129,7 +114,6 @@ public boolean setSticker(String fileName)
 ```
 
 ### 4.3 设置滤镜
-
 ```java
 /**
  * 开启或者关闭滤镜 如果 path 为空 关闭滤镜
@@ -141,7 +125,6 @@ public boolean setFilter(String fileName)
 ```
 
 ### 4.4 设置特效组合
-
 ```java
 /**
  * 设置特效组合，目前仅支持美颜、美型两种特效的任意叠加
@@ -153,19 +136,18 @@ public boolean setComposeNodes(String[] nodes)
 ```
 
 ### 4.5 设置 composer 特效是否可叠加
-
 ```java
 /**
  * 设置 composer 类型特效（美颜、美妆）是否可以与贴纸特效叠加
+ * 如果设置为不可叠加，设置贴纸特效会覆盖掉 composer 类型特效
  *
- * @param mode 1 可以叠加，0 不可叠加，默认为 1
+ * @param mode ALONE 代表不可叠加，SHARE 代表可叠加
  * @return 设置是否成功
  */
-public boolean setComposerMode(int mode)
+public boolean setComposerMode(BytedEffectConstants.ComposerMode mode)
 ```
 
 ### 4.6 更新某个特效的强度
-
 ```java
 /**
  * 更新某个特效的强度
@@ -178,7 +160,6 @@ public boolean updateComposeNode(String key, float value)
 ```
 
 ### 4.7 设置某类型特效强度
-
 ```java
 /**
  * 设置美颜/滤镜(除塑形)强度
@@ -217,7 +198,6 @@ public enum IntensityType {
 ```
 
 ### 4.8 获得已经开启的特效节点名称
-
 ```java
 /**
  * 获得已经开启的特效节点
@@ -227,7 +207,6 @@ public String[] getComposeNodes()
 ```
 
 ### 4.9 恢复特效设置
-
 ```java
 /**
  * 恢复特效设置
@@ -236,7 +215,6 @@ public void recoverStatus()
 ```
 
 ### 4.10 释放特效资源
-
 ```java
 /**
  * 释放特效资源，需要工作在渲染线程
@@ -245,7 +223,6 @@ public void destroyEffectSDK()
 ```
 
 ### 4.11 获取支持的滤镜列表
-
 ```java
 /**
  * 获取所有滤镜
@@ -256,7 +233,6 @@ public static List<FilterItem> getFilterList()
 ```
 
 ### 4.12 获取支持的贴纸列表
-
 ```java
 /**
  * 获取所有贴纸
@@ -267,7 +243,6 @@ public static List<StickerItem> getStickerList()
 ```
 
 ### 4.13 获取支持的美颜列表
-
 ```java
 /**
  * 获取所有美颜
@@ -278,7 +253,6 @@ public static List<MakeUpModel> getBeautyList()
 ```
 
 ### 4.14 获取支持的美型列表
-
 ```java
 /**
  * 获取所有美型
@@ -288,17 +262,152 @@ public static List<MakeUpModel> getBeautyList()
 public static List<MakeUpModel> getShapeList()
 ```
 
-# 5 快速开始
+### 4.15 判断是否正在使用特效
+```java
+/**
+ * 判断是否正在使用特效
+ *
+ * @return 如果已经使用了至少一种特效则返回 true ,否则返回 false
+ */
+public boolean isUsingEffect()
+```
 
-在开始编码之前请确保 jar、build.gradle、so、素材文件、混淆规则已正确配置，此处演示的场景为视频录制场景，编辑场景使用的方式与之类似，可查看 demo 中的写法，有关于短视频 SDK 的使用请参照[短视频 SDK 使用文档](https://developer.qiniu.com/pili/sdk/3734/android-short-video-sdk)
+### 4.16 预览时处理纹理
+```java
+/**
+ * 预览时特效处理
+ *
+ * @param texId        纹理
+ * @param texWidth     纹理宽度
+ * @param texHeight    纹理高度
+ * @param timestampNs  时间戳
+ * @param processTypes 处理类型列表
+ * @param isOES        是否为 OES 格式纹理
+ * @return 处理后的纹理，纹理格式为 2D ，处理失败会返回原纹理
+ */
+public int onDrawFrame(int texId, int texWidth, int texHeight, long timestampNs, List<ProcessType> processTypes, boolean isOES)
+```
+`processTypes` 参数中存储的应为将纹理转正所需要的处理类型，推流 SDK 回调的纹理会因为摄像头的前后置、横竖屏而回调方向不同的纹理、YUV 数据，例如前置竖屏回调的纹理、YUV 数据是旋转了 90 度并做了竖向镜像的，转正需要经过旋转 270 度并横向镜像处理，使用该方法进行处理时， `processTypes` 中应该按顺序添加 `ProcessType.ROTATE_270` 与 `ProcessType.FLIPPED_HORIZONTAL` ，其它情况请参见 PLDroidMediaStreamingDemo。传入的时间戳的变化速率会影响特效中动画的执行速度。
+
+ProcessType 的类结构如下所示：
 
 ```java
-//创建特效插件对象，传入插件类型为录制特效插件，传入特效素材根路径
-mByteDancePlugin = new ByteDancePlugin(this, ByteDancePlugin.PluginType.record, mResourcePath);
-//将特效插件应用在视频录制上，有关于视频录制类 PLShortVideoRecorder 的介绍请阅读短视频 SDK 使用文档
-mShortVideoRecorder.setEffectPlugin(mByteDancePlugin);
-//设置 composer 为可叠加模式
-mByteDancePlugin.setComposerMode(1);
+public enum ProcessType {
+    //旋转 0 度
+    ROTATE_0,
+    //旋转 90 度
+    ROTATE_90,
+    //旋转 180 度
+    ROTATE_180,
+    //旋转 270 度
+    ROTATE_270,
+    //竖直镜像
+    FLIPPED_VERTICAL,
+    //横向镜像
+    FLIPPED_HORIZONTAL
+}
+```
+
+### 4.17 保存时处理纹理
+```java
+/**
+ * 保存时特效处理
+ *
+ * @param texId        纹理
+ * @param texWidth     纹理宽度
+ * @param texHeight    纹理高度
+ * @param timestampNs  时间戳
+ * @param processTypes 处理类型列表
+ * @param isOES        是否为 OES 格式纹理
+ * @return 处理后的纹理，纹理格式为 2D ，处理失败会返回原纹理
+ */
+public int onSaveFrame(int texId, int texWidth, int texHeight, long timestampNs, List<ProcessType> processTypes, boolean isOES)
+```
+此方法用于编辑模块的保存场景，处理保存场景下回调的纹理，使用此方法时请确保你创建的 ByteDancePlugin 对象是 edit 类型的，使用方法与预览时的纹理处理相同，请参考 4.17 小节。
+
+### 4.18 处理 YUV 数据
+```java
+/**
+ * 处理 YUV 数据
+ *
+ * @param inputData    YUV 数据
+ * @param imageWidth   图像宽度
+ * @param imageHeight  图像高度
+ * @param processTypes 处理类型列表
+ * @param outputData   处理后的 YUV 数据
+ * @param timestampNs  YUV 数据的时间戳
+ * @return 处理是否成功
+ */
+public boolean processBuffer(byte[] inputData, int imageWidth, int imageHeight, byte[] outputData, List<ProcessType> processTypes, long timestampNs)
+```
+该方法的调用必须在其预览的线程中，并且需要注意一点，如果未添加特效经过此方法处理会返回错误的数据，需要在外部添加判断。`processTypes` 参数的使用与预览处理纹理相同，请参见 4.16 小节。传入的时间戳的变化速率会影响特效中动画的执行速度。
+
+### 4.18 检测 SDK 是否已经初始化完毕
+```java
+/**
+ * 返回是否已成功初始化 SDK
+ *
+ * @return 成功返回 true
+ */
+public boolean isEffectSDKInited()
+```
+
+### 4.19 Surface 生命周期
+```java
+public void onSurfaceCreated()
+public void onSaveSurfaceChanged(int width, int height)
+public void onSurfaceDestroy()
+```
+这些方法应该随预览 Surface 的生命周期回调的调用而调用，如果是旋转摄像头，需要手动调用 `onSurfaceDestroy` 。
+
+```java
+public void onSaveSurfaceCreated()
+public void onSaveSurfaceChanged(int width, int height)
+public void onSaveSurfaceDestroy()
+```
+这些方法应该随保存 Surface 的声明周期回调的调用而调用，具体使用方式请参照 PLDroidShortVideoDemo。
+
+# 5 快速开始
+在开始编码之前请确保 jar、build.gradle、so、素材文件、混淆规则已正确配置，此处演示的场景为视频录制场景，编辑场景使用的方式与之类似，可查看 demo 中的写法，有关于短视频 SDK 的使用请参照[短视频 SDK 使用文档](https://developer.qiniu.com/pili/sdk/3734/android-short-video-sdk)
+
+### 5.1 初始化 ByteDancePlugin
+```java
+//创建 ByteDancePlugin 对象，传入的路径为资源文件在手机本地的地址，请用户在此之前自行拷贝
+ByteDancePlugin mByteDancePlugin = new ByteDancePlugin(this, ByteDancePlugin.PluginType.record, getExternalFilesDir("assets") + File.separator + "resource");
+//设置 Composer 类型特效可与动态贴纸叠加
+mByteDancePlugin.setComposerMode(BytedEffectConstants.ComposerMode.SHARE);
+//声明处理类型列表变量，并为其填入所需要的处理类型，因为短视频 SDK 回调的纹理是竖直镜像的，这里传入 ProcessType.FLIPPED_VERTICAL ，ByteDancePlugin 会根据此参数将纹理转正
+final List<ProcessType> processTypes = new ArrayList<>();
+processTypes.add(ProcessType.FLIPPED_VERTICAL);
+```
+
+### 5.2 设置纹理回调处理
+```java
+mShortVideoRecorder.setVideoFilterListener(new PLVideoFilterListener() {
+    @Override
+    public void onSurfaceCreated() {
+        mByteDancePlugin.onSurfaceCreated();
+    }
+
+    @Override
+    public void onSurfaceChanged(int width, int height) {
+        mByteDancePlugin.onSaveSurfaceChanged(width, height);
+    }
+
+    @Override
+    public void onSurfaceDestroy() {
+        mByteDancePlugin.onSurfaceDestroy();
+    }
+
+    @Override
+    public int onDrawFrame(int texId, int texWidth, int texHeight, long timestampNs, float[] transformMatrix) {
+        return mByteDancePlugin.onDrawFrame(texId, texWidth, texHeight, timestampNs, processTypes, false);
+    }
+});
+```
+
+### 5.3 设置特效
+```java
 //设置一个动态贴纸，传入 "" 代表取消贴纸
 mByteDancePlugin.setSticker(stickerFileName);
 //设置一个滤镜，传入 "" 代表取消滤镜
@@ -322,11 +431,9 @@ mByteDancePlugin.destroyEffectSDK();
 ```
 
 # 6 资源相关
-
 ## 6.1 资源格式
-
 ### 6.1.1 ComposeMakeup 美颜、美型
-SDK 会根据该目录下的 config.json 文件来解析素材文件，可使用 ```getBeautyList```和```getShapeList```来获取美颜和美型信息，用户可按照格式修改其内容，json 格式如下：
+SDK 会根据该目录下的 config.json 文件来解析素材文件，可使用 `getBeautyList` 和 `getShapeList` 来获取美颜和美型信息，用户可按照格式修改其内容，json 格式如下：
 
 ```java
 {
@@ -358,7 +465,7 @@ SDK 会根据该目录下的 config.json 文件来解析素材文件，可使用
 ```
 
 ### 6.1.2 FilterResource 滤镜
-SDK 会根据该目录下的 config.json 文件来解析素材文件，可使用 ```getFilterList```来获取滤镜信息，用户可按照格式修改其内容，json 格式如下：  
+SDK 会根据该目录下的 config.json 文件来解析素材文件，可使用 `getFilterList` 来获取滤镜信息，用户可按照格式修改其内容，json 格式如下：  
 
 ```
 [
@@ -374,7 +481,7 @@ SDK 会根据该目录下的 config.json 文件来解析素材文件，可使用
 ```
 
 ### 6.1.3 StickerResource 动态贴纸
-SDK 会根据该目录下的 config.json 文件来解析素材文件，可使用 ```getStickerList```来获取动态贴纸信息，用户可按照格式修改其内容，json 格式如下：
+SDK 会根据该目录下的 config.json 文件来解析素材文件，可使用 `getStickerList` 来获取动态贴纸信息，用户可按照格式修改其内容，json 格式如下：
 
 ```java
 [
@@ -393,12 +500,10 @@ SDK 会根据该目录下的 config.json 文件来解析素材文件，可使用
 SDK 会根据该文件夹下的文件进行鉴权，请确保该文件夹下文件有且只有一个。如果授权过期可通过动态下发文件来替换该文件即可，无需更新 APP。
 
 ## 6.2 素材购买与更新
-
 如果用户想要购买更多样的特效素材，可前往特效君 App 进行挑选，只限美颜、美型、滤镜与动态贴纸。
 如果用户需要在 APP 中新增或者更新素材，可通过动态下发素材文件到素材文件夹，无需更新 APP。
 
 ## 6.3 常见错误
-
 ### 6.3.1 EffectSDK ERROR: Parser: cJson parse fail 
 EffectSDK ERROR: Parser: cJson parse fail 出现这个报错一般是素材与 license 绑定的 ApplicationID 不匹配（每套素材都会与其授权绑定，需配套使用），请检查使用的素材与授权是否配套。
 
@@ -406,6 +511,9 @@ EffectSDK ERROR: Parser: cJson parse fail 出现这个报错一般是素材与 l
 出现上述日志，表示设置的素材路径可能不正确，SDK内部没有正确读到素材的配置文件，请检查素材路径是否正确。
 
 # 7. 历史记录
+* 1.0.1
+  - 发布 ByteDancePlugin-1.0.1.jar
+  - 修改了使用方式
 * 1.0.0
   - 发布 pldroid-shortvideo-3.1.2.jar
   - 发布 ByteDancePlugin-1.0.0.jar
@@ -481,7 +589,6 @@ EffectSDK ERROR: Parser: cJson parse fail 出现这个报错一般是素材与 l
   - 支持 arm64-v8a, armeabi-v7a 体系架构
 
 # 8. FAQ
-
 ### 8.1 如何获取此 SDK 授权？
 答：可通过 400-808-9176 转 2 号线联系七牛商务咨询，或者 [通过工单](https://support.qiniu.com/?ref=developer.qiniu.com) 联系七牛的技术支持。
 
@@ -492,7 +599,7 @@ EffectSDK ERROR: Parser: cJson parse fail 出现这个报错一般是素材与 l
 答：不通用，素材与包名绑定，不同包名不可以混用素材
 
 ### 8.4 如何使用 demo 中默认授权进行测试？
-答：将 ApplicationID 修改为“com.qiniu.pili.droid.shortvideo.demo”即可开始测试。
+答：将 ApplicationID 修改为 `com.qiniu.pili.droid.shortvideo.bytedance.demo` 并将资源文件正确配置即可开始测试。
 
 ### 8.5 正式授权到期必需替换新授权发布新版本强制用户更新吗？
 答：正式授权到期需替换新授权文件，但不一定需要发布新版本，建议可以通过类似文件下发服务的方式将新授权文件下发下去，这属于应用层逻辑。

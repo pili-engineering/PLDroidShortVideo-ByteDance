@@ -16,6 +16,7 @@ import android.view.WindowManager;
 
 import com.qiniu.bytedanceplugin.ByteDancePlugin;
 import com.qiniu.bytedanceplugin.effectsdk.BytedEffectConstants;
+import com.qiniu.bytedanceplugin.utils.ProcessType;
 import com.qiniu.pili.droid.shortvideo.*;
 import com.qiniu.pili.droid.shortvideo.demo.R;
 import com.qiniu.pili.droid.shortvideo.demo.utils.Config;
@@ -31,6 +32,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.qiniu.pili.droid.shortvideo.demo.utils.RecordSettings.chooseCameraFacingId;
@@ -132,8 +134,30 @@ public class VideoRecordActivity extends AppCompatActivity {
         mShortVideoRecorder.prepare(mRecordView.getPreviewView(), cameraSetting, microphoneSetting, videoEncodeSetting, audioEncodeSetting, null, recordSetting);
 
         mByteDancePlugin = new ByteDancePlugin(this, ByteDancePlugin.PluginType.record, getExternalFilesDir("assets") + File.separator + "resource");
-        mByteDancePlugin.setComposerMode(1);
-        mShortVideoRecorder.setEffectPlugin(mByteDancePlugin);
+        mByteDancePlugin.setComposerMode(BytedEffectConstants.ComposerMode.SHARE);
+        final List<ProcessType> processTypes = new ArrayList<>();
+        processTypes.add(ProcessType.FLIPPED_VERTICAL);
+        mShortVideoRecorder.setVideoFilterListener(new PLVideoFilterListener() {
+            @Override
+            public void onSurfaceCreated() {
+                mByteDancePlugin.onSurfaceCreated();
+            }
+
+            @Override
+            public void onSurfaceChanged(int width, int height) {
+                mByteDancePlugin.onSaveSurfaceChanged(width, height);
+            }
+
+            @Override
+            public void onSurfaceDestroy() {
+                mByteDancePlugin.onSurfaceDestroy();
+            }
+
+            @Override
+            public int onDrawFrame(int texId, int texWidth, int texHeight, long timestampNs, float[] transformMatrix) {
+                return mByteDancePlugin.onDrawFrame(texId, texWidth, texHeight, timestampNs, processTypes, false);
+            }
+        });
     }
 
     @Override

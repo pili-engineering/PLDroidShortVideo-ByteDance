@@ -58,7 +58,6 @@ public class RecordView extends RelativeLayout {
     //标志面板
     private EffectFragment mEffectFragment;
     private StickerFragment mStickerFragment;
-    private OnCloseListener mWorkingFragment;
     private FragmentManager mFragmentManager;
 
     private Context mContext;
