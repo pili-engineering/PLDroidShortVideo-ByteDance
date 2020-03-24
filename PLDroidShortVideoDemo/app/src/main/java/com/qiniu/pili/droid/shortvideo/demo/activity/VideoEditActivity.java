@@ -1244,7 +1244,7 @@ public class VideoEditActivity extends AppCompatActivity implements PLVideoSaveL
                     mMainAudioFileAdded = true;
                 }
 
-                PLMixAudioFile audioFile = new PLMixAudioFile(Config.EDITED_FILE_PATH);
+                PLMixAudioFile audioFile = new PLMixAudioFile(selectedFilepath);
                 if (mAudioMixingFileCount == 0) {
                     ToastUtils.showShortMessage("添加第一个混音文件");
                     long firstMixingDurationMs = (mInputMp4FileDurationMs <= 5000) ? mInputMp4FileDurationMs : 5000;
