@@ -5,7 +5,7 @@ PLDroidShortVideo-ByteDance 是七牛推出的一款适用于 Android 平台的�
 
 ### 版本
 - 发布 ByteDancePlugin-1.0.1.jar
-- 支持短视频 SDK 基础版、进阶版与专业版的接入
+- 新增短视频 SDK 基础版和进阶版的支持
 
 ### 注意事项
 
