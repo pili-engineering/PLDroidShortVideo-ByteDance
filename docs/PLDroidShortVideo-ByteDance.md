@@ -43,7 +43,7 @@ dependencies {
     implementation 'com.qiniu:qiniu-android-sdk:7.3.11'
 }
 ```
-**短视频 SDK 的任意版本都可以和 ByteDancePlugin v1.0.1 及以上的版本配合使用** 
+**短视频 SDK 的基础版、进阶版和专业版都可以与 ByteDancePlugin v1.0.1 及以上的版本配合使用** 
 
 ## 3.5 修改代码混淆规则
 为 proguard-rules.pro 增加如下规则:
