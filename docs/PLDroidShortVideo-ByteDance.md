@@ -67,11 +67,11 @@ dependencies {
 ## 3.7 添加特效素材
 | 文件名称                           | 文件类型      | 大小    | 备注          |
 | ------------------------------ | ------- | ----- | ----------- |
-| ComposeMakeup.bundle           | 高级美颜、美型素材 | 376KB | 包含美白、磨皮、锐化、瘦脸、大眼 |
+| ComposeMakeup.bundle           | 高级美颜、美型、美妆素材 | 3.6MB | 包含美白、磨皮、锐化、瘦脸、大眼、口红、腮红等若干款特效 |
 | FilterResource.bundle          | 高级滤镜素材  |  12.3MB  | 包含 48 款滤镜 |
 | LicenseBag.bundle              | 授权文件   | 426字节  | 该包内有且只有一个文件，文件名内包含了所绑定的包名和授权的起止日期 |
-| ModelResource.bundle           | 模型文件  | 5.5MB  | 用于人脸识别、手势识别 |
-| StickerResource.bundle         | 动态贴纸素材 | 39.9MB | 包含 20 款动态贴纸 |
+| ModelResource.bundle           | 模型文件  | 6.6MB  | 用于人脸识别、手势识别 |
+| StickerResource.bundle         | 动态贴纸素材 | 61.3MB | 包含 20 款动态贴纸 |
 
 如用户需要更多款式的美颜、美型、滤镜、动态贴纸素材，可在特效君 APP 上选择，联系七牛商务咨询进行购买。
 
@@ -262,7 +262,69 @@ public static List<MakeUpModel> getBeautyList()
 public static List<MakeUpModel> getShapeList()
 ```
 
-### 4.15 判断是否正在使用特效
+### 4.15 获取支持的美妆类型列表
+```java
+/**
+ * 获取所有美妆类型
+ *
+ * @return 美妆类型列表，具体到某一部位
+ */
+public static List<MakeUpModel> getMakeUpList()
+```
+
+### 4.16 获取支持的美妆效果集合
+```java
+/**
+ * 获取所有具体的美妆效果集合
+ *
+ * @return 美妆效果集合，具体到某一部位的某一种效果
+ */
+public static Map<String, List<MakeUpModel>> getMakeUpOptionItems()
+```
+
+### 4.17 获取支持的美体列表
+```java
+/**
+ * 获取所有美体信息
+ *
+ * @return 美体列表
+ */
+public static List<MakeUpModel> getBodyList()
+```
+
+### 4.18 更新 compose 类型特效列表
+```java
+/**
+ * 从资源中重新解析配置文件，更新美颜、微整形、美妆、美体效果列表
+ */
+public static void updateComposeList()
+```
+
+### 4.19 更新滤镜效果列表
+```java
+/**
+ * 从资源中重新解析配置文件，更新滤镜效果列表
+ */
+public static void updateFilterList()
+```
+
+### 4.20 更新动态贴纸列表
+```java
+/**
+ * 从资源中重新解析配置文件，更新动态贴纸列表
+ */
+public static void updateStickerList()
+```
+
+### 4.21 更新全部特效列表
+```java
+/**
+ * 从资源中重新解析配置文件，更新全部特效列表
+ */
+public static void updateAllList()
+```
+
+### 4.22 判断是否正在使用特效
 ```java
 /**
  * 判断是否正在使用特效
@@ -272,7 +334,7 @@ public static List<MakeUpModel> getShapeList()
 public boolean isUsingEffect()
 ```
 
-### 4.16 预览时处理纹理
+### 4.23 预览时处理纹理
 ```java
 /**
  * 预览时特效处理
@@ -308,7 +370,7 @@ public enum ProcessType {
 }
 ```
 
-### 4.17 保存时处理纹理
+### 4.24 保存时处理纹理
 ```java
 /**
  * 保存时特效处理
@@ -325,7 +387,7 @@ public int onSaveFrame(int texId, int texWidth, int texHeight, long timestampNs,
 ```
 此方法用于编辑模块的保存场景，处理保存场景下回调的纹理，使用此方法时请确保你创建的 ByteDancePlugin 对象是 edit 类型的，使用方法与预览时的纹理处理相同，请参考 4.17 小节。
 
-### 4.18 处理 YUV 数据
+### 4.25 处理 YUV 数据
 ```java
 /**
  * 处理 YUV 数据
@@ -342,7 +404,7 @@ public boolean processBuffer(byte[] inputData, int imageWidth, int imageHeight, 
 ```
 该方法的调用必须在其预览的线程中，并且需要注意一点，如果未添加特效经过此方法处理会返回错误的数据，需要在外部添加判断。`processTypes` 参数的使用与预览处理纹理相同，请参见 4.16 小节。传入的时间戳的变化速率会影响特效中动画的执行速度。
 
-### 4.18 检测 SDK 是否已经初始化完毕
+### 4.26 检测 SDK 是否已经初始化完毕
 ```java
 /**
  * 返回是否已成功初始化 SDK
@@ -352,7 +414,7 @@ public boolean processBuffer(byte[] inputData, int imageWidth, int imageHeight, 
 public boolean isEffectSDKInited()
 ```
 
-### 4.19 Surface 生命周期
+### 4.27 Surface 生命周期
 ```java
 public void onSurfaceCreated()
 public void onSaveSurfaceChanged(int width, int height)
@@ -374,7 +436,7 @@ public void onSaveSurfaceDestroy()
 ```java
 //创建 ByteDancePlugin 对象，传入的路径为资源文件在手机本地的地址，请用户在此之前自行拷贝
 ByteDancePlugin mByteDancePlugin = new ByteDancePlugin(this, ByteDancePlugin.PluginType.record, getExternalFilesDir("assets") + File.separator + "resource");
-//设置 Composer 类型特效可与动态贴纸叠加
+//设置 Compose 类型特效可与动态贴纸叠加
 mByteDancePlugin.setComposerMode(BytedEffectConstants.ComposerMode.SHARE);
 //声明处理类型列表变量，并为其填入所需要的处理类型，因为短视频 SDK 回调的纹理是竖直镜像的，这里传入 ProcessType.FLIPPED_VERTICAL ，ByteDancePlugin 会根据此参数将纹理转正
 final List<ProcessType> processTypes = new ArrayList<>();
@@ -432,8 +494,8 @@ mByteDancePlugin.destroyEffectSDK();
 
 # 6 资源相关
 ## 6.1 资源格式
-### 6.1.1 ComposeMakeup 美颜、美型
-SDK 会根据该目录下的 config.json 文件来解析素材文件，可使用 `getBeautyList` 和 `getShapeList` 来获取美颜和美型信息，用户可按照格式修改其内容，json 格式如下：
+### 6.1.1 ComposeMakeup 美颜、美型、美妆、美体
+SDK 会根据该目录下的 config.json 文件来解析素材文件，可使用 `getBeautyList` 获取可支持的美颜信息列表，使用 `getShapeList` 获取美型信息列表，使用 `getMakeUpList` 获取美妆类型信息列表，使用 `getMakeUpOptionItems` 获取具体的美妆信息集合，使用 `getBodyList` 获取美体信息列表，用户可按照格式修改其内容，详细配置请参考 demo ,大致格式如下：
 
 ```java
 {
@@ -452,9 +514,53 @@ SDK 会根据该目录下的 config.json 文件来解析素材文件，可使用
   "reshape": [
     {
       "fileName": "reshape", //美型素材文件夹名称
-      "iconName": "cheek.png", //特效图表名称，请放在美型素材文件夹下
+      "iconName": "cheek.png", //特效图标名称，请放在美型素材文件夹下
       "effectName": "瘦脸", //特效名称
       "key": "Internal_Deform_Overall", //特效特征值，不可更改
+      "defaultIntensity": 0.5 //默认特效强度，范围 0~1
+    },
+    
+    ...
+    
+  ]，
+  "makeUp": {
+    "blush": { //美妆素材文件夹名称
+      "effectClassName": "腮红", //美妆类型名称
+      "iconName": "blush.png", //该类美妆类型所展示的图标名称，请放在对应的素材文件夹下
+      "key": "Internal_Makeup_Blusher", //该类美妆特效的特征值，不可更改
+      "effect": [ //该类美妆类型中所包含的具体的特效效果
+        {
+          "fileName": "weixun", //具体特效的文件夹名称，请在此文件夹下放入 icon.png 作为图标
+          "effectName": "微醺", //具体特效的名称
+          "defaultIntensity": 0.5 //具体特效的默认强度，范围 0~1
+        },
+        
+        ...
+        
+    	]
+    },
+    "eyebrow": {
+      "effectClassName": "眉毛",
+      "iconName": "eyebrow.png",
+      "key": "Internal_Makeup_Brow",
+      "effect": [
+        {
+          "fileName": "BR01",
+          "effectName": "BRO1",
+          "defaultIntensity": 0.5
+        },
+           
+        ...
+        
+    	]
+    }
+  },
+  "body": [
+    {
+      "fileName": "body/longleg", //美体素材文件夹路径
+      "iconName": "leg.png", //特效图标名称，请放在美体素材文件夹下
+      "effectName": "长腿", //特效名称
+      "key": "", //特效特征值，不可更改
       "defaultIntensity": 0.5 //默认特效强度，范围 0~1
     },
     
@@ -511,13 +617,22 @@ EffectSDK ERROR: Parser: cJson parse fail 出现这个报错一般是素材与 l
 出现上述日志，表示设置的素材路径可能不正确，SDK内部没有正确读到素材的配置文件，请检查素材路径是否正确。
 
 # 7. 历史记录
+* 1.0.2
+  - 发布 ByteDancePlugin-1.0.2.jar
+  - 新增获取可支持的美妆类型列表的接口
+  - 新增获取可支持的具体美妆效果集合的接口
+  - 新增获取可支持的美体效果列表的接口
+  - 新增更新 compose 类型特效（指的是美颜、美型、美妆、美体）列表的接口
+  - 新增更新可支持的滤镜列表的接口
+  - 新增更新可支持的动态贴纸列表接口
+  - 新增更新所有特效列表的接口
 * 1.0.1
   - 发布 ByteDancePlugin-1.0.1.jar
   - 修改了使用方式
 * 1.0.0
   - 发布 pldroid-shortvideo-3.1.2.jar
   - 发布 ByteDancePlugin-1.0.0.jar
-  - 发布 libpldroid_shortvideo_core.so
+  - 发布 libpldroid\_shortvideo_core.so
   - 发布 libpldroid_encoder.so
   - 发布 libpldroid_amix.so
   - 发布 libpldroid_beauty.so
@@ -610,3 +725,12 @@ EffectSDK ERROR: Parser: cJson parse fail 出现这个报错一般是素材与 l
 2.检查 ApplicationId 是否与授权包名一致  
 3.检查 check_license 与对应版本号是否一致  
 如确定不是以上问题，请[通过工单](https://support.qiniu.com/?ref=developer.qiniu.com) 联系七牛的技术支持。
+
+### 8.7 资源文件体积较大，可以做文件下发吗？
+答：可以，ByteDancePlugin 实例化的时候并不会检查资源文件的完整性，但要确保授权文件的存在，随后可根据使用接口获取的特效信息来判断特效文件是否存在，向客户展示不同的图标，当用户选择一个特效文件不存在的特效时请求服务器，将得到的文件放到对应的资源路径，随后调用设置特效接口即可。
+
+### 8.8 新购买了额外的特效素材，如何更新到已经上线的 APP 中
+答：借助文件下发，将旧的资源文件替换为新的资源文件即可。
+
+### 8.9 特效素材文件需要配置 json ,其中的 key 值从哪里可以找到？
+答：在 demo 资源文件的 config.json 中可以查询每种特效所对应的 key 。
