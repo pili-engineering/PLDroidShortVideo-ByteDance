@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.qiniu.bytedanceplugin.model.StickerItem;
+import com.qiniu.bytedanceplugin.model.StickerModel;
 import com.qiniu.pili.droid.shortvideo.demo.R;
 import com.qiniu.pili.droid.shortvideo.demo.adapter.StickerRVAdapter;
 import com.qiniu.pili.droid.shortvideo.demo.fragment.contract.StickerContract;
@@ -38,20 +38,20 @@ public class StickerFragment extends BaseFeatureFragment<StickerContract.Present
     }
 
     @Override
-    public void onItemClick(StickerItem item) {
-        if (item.getTip()!=null) {
+    public void onItemClick(StickerModel item) {
+        if (item.getTip() != null) {
             ToastUtils.showShortMessage(item.getTip());
         }
         if (getCallback() == null) {
             return;
         }
-        getCallback().onStickerSelected(item.getFileName());
+        getCallback().onStickerSelected(item.getFilePath());
     }
 
     @Override
     public void onClose() {
         getCallback().onStickerSelected(null);
-        ((StickerRVAdapter)rv.getAdapter()).setSelect(0);
+        ((StickerRVAdapter) rv.getAdapter()).setSelect(0);
     }
 
     public interface IStickerCallback {

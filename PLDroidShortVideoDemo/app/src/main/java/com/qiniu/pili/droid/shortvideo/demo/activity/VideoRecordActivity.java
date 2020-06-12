@@ -15,8 +15,8 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.qiniu.bytedanceplugin.ByteDancePlugin;
-import com.qiniu.bytedanceplugin.effectsdk.BytedEffectConstants;
-import com.qiniu.bytedanceplugin.utils.ProcessType;
+import com.qiniu.bytedanceplugin.model.ComposerMode;
+import com.qiniu.bytedanceplugin.model.ProcessType;
 import com.qiniu.pili.droid.shortvideo.*;
 import com.qiniu.pili.droid.shortvideo.demo.R;
 import com.qiniu.pili.droid.shortvideo.demo.utils.Config;
@@ -131,31 +131,41 @@ public class VideoRecordActivity extends AppCompatActivity {
         recordSetting.setVideoCacheDir(Config.VIDEO_STORAGE_DIR);
         recordSetting.setVideoFilepath(Config.RECORD_FILE_PATH);
 
-        mShortVideoRecorder.prepare(mRecordView.getPreviewView(), cameraSetting, microphoneSetting, videoEncodeSetting, audioEncodeSetting, null, recordSetting);
+        mShortVideoRecorder.prepare(mRecordView.getPreviewView(), cameraSetting, microphoneSetting,
+                videoEncodeSetting, audioEncodeSetting, null, recordSetting);
+        initEffect();
+    }
 
-        mByteDancePlugin = new ByteDancePlugin(this, ByteDancePlugin.PluginType.record, getExternalFilesDir("assets") + File.separator + "resource");
-        mByteDancePlugin.setComposerMode(BytedEffectConstants.ComposerMode.SHARE);
+    private void initEffect() {
+        mByteDancePlugin = new ByteDancePlugin(this, ByteDancePlugin.PluginType.record);
+        // 由于短视频 SDK 纹理回调的方向为竖直镜像的，所以需要一个竖直镜像操作将其转正
         final List<ProcessType> processTypes = new ArrayList<>();
         processTypes.add(ProcessType.FLIPPED_VERTICAL);
         mShortVideoRecorder.setVideoFilterListener(new PLVideoFilterListener() {
             @Override
             public void onSurfaceCreated() {
-                mByteDancePlugin.onSurfaceCreated();
+                String resourcePath = getExternalFilesDir("assets") + File.separator + "resource";
+                // 初始化操作应该在渲染线程调用
+                mByteDancePlugin.init(resourcePath);
+                mByteDancePlugin.recoverEffects();
             }
 
             @Override
             public void onSurfaceChanged(int width, int height) {
-                mByteDancePlugin.onSaveSurfaceChanged(width, height);
+
             }
 
             @Override
             public void onSurfaceDestroy() {
-                mByteDancePlugin.onSurfaceDestroy();
+                mByteDancePlugin.destroy();
             }
 
             @Override
             public int onDrawFrame(int texId, int texWidth, int texHeight, long timestampNs, float[] transformMatrix) {
-                return mByteDancePlugin.onDrawFrame(texId, texWidth, texHeight, timestampNs, processTypes, false);
+                // onDrawFrame 回调的纹理格式有两种，分别为 2D 和 OES，可通过 setVideoFilterListener 中的 callbackOES 参数指定，默认为 2D
+                // 请根据回调的纹理格式改变 ByteDancePlugin.drawFrame 中的 isOES 参数
+                // 该方法如果处理成功，回调的纹理格式为 2D，否则返回原纹理
+                return mByteDancePlugin.drawFrame(texId, texWidth, texHeight, System.nanoTime(), processTypes, false);
             }
         });
     }
@@ -381,17 +391,17 @@ public class VideoRecordActivity extends AppCompatActivity {
             mRecordView.getPreviewView().queueEvent(new Runnable() {
                 @Override
                 public void run() {
-                    mByteDancePlugin.setComposeNodes(nodes);
+                    mByteDancePlugin.setComposerNodes(nodes);
                 }
             });
         }
 
         @Override
-        public void onUpdateComposeNodeIntensity(final String key, final float value) {
+        public void onUpdateComposeNodeIntensity(final String path, final String key, final float value) {
             mRecordView.getPreviewView().queueEvent(new Runnable() {
                 @Override
                 public void run() {
-                    mByteDancePlugin.updateComposeNode(key, value);
+                    mByteDancePlugin.updateComposerNode(path, key, value);
                 }
             });
         }
@@ -411,7 +421,7 @@ public class VideoRecordActivity extends AppCompatActivity {
             mRecordView.getPreviewView().queueEvent(new Runnable() {
                 @Override
                 public void run() {
-                    mByteDancePlugin.updateIntensity(BytedEffectConstants.IntensityType.Filter, value);
+                    mByteDancePlugin.updateFilterIntensity(value);
                 }
             });
         }

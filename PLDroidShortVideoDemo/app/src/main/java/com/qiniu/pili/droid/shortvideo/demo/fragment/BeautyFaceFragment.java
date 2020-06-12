@@ -18,7 +18,6 @@ import com.qiniu.pili.droid.shortvideo.demo.view.RecordView;
 
 import java.util.List;
 
-
 public class BeautyFaceFragment extends BaseFeatureFragment<ItemGetContract.Presenter, BeautyFaceFragment.IBeautyCallBack>
         implements EffectFragment.IProgressCallback, RecordView.OnCloseListener, ButtonViewRVAdapter.OnItemClickListener, ItemGetContract.View {
     private RecyclerView rv;
@@ -61,26 +60,26 @@ public class BeautyFaceFragment extends BaseFeatureFragment<ItemGetContract.Pres
         if (rv == null || rv.getAdapter() == null) {
             return;
         }
-        ((ButtonViewRVAdapter)rv.getAdapter()).onProgress(progress, id);
+        ((ButtonViewRVAdapter) rv.getAdapter()).onProgress(progress, id);
     }
 
     @Override
     public int getSelect() {
-        return ((ButtonViewRVAdapter)rv.getAdapter()).getSelect();
+        return ((ButtonViewRVAdapter) rv.getAdapter()).getSelect();
     }
 
     @Override
     public void setSelect(int select) {
-        ((ButtonViewRVAdapter)rv.getAdapter()).setSelect(select);
+        ((ButtonViewRVAdapter) rv.getAdapter()).setSelect(select);
     }
 
     @Override
     public void setSelectItem(int id) {
-        ((ButtonViewRVAdapter)rv.getAdapter()).setSelectItem(id);
+        ((ButtonViewRVAdapter) rv.getAdapter()).setSelectItem(id);
     }
 
     @Override
     public void onClose() {
-        ((ButtonViewRVAdapter)rv.getAdapter()).onClose();
+        ((ButtonViewRVAdapter) rv.getAdapter()).onClose();
     }
 }

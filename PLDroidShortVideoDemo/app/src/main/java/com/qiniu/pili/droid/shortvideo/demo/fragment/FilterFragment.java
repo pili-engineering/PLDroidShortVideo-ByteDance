@@ -8,23 +8,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.qiniu.bytedanceplugin.model.FilterItem;
+import com.qiniu.bytedanceplugin.model.FilterModel;
 import com.qiniu.pili.droid.shortvideo.demo.R;
 import com.qiniu.pili.droid.shortvideo.demo.adapter.FilterRVAdapter;
 import com.qiniu.pili.droid.shortvideo.demo.fragment.contract.FilterContract;
 import com.qiniu.pili.droid.shortvideo.demo.fragment.contract.presenter.FilterPresenter;
 import com.qiniu.pili.droid.shortvideo.demo.view.RecordView;
 
-
-/**
- * 滤镜
- */
 public class FilterFragment extends BaseFeatureFragment<FilterContract.Presenter, FilterFragment.IFilterCallback>
         implements FilterRVAdapter.OnItemClickListener, RecordView.OnCloseListener, FilterContract.View {
     private RecyclerView rv;
 
     public interface IFilterCallback {
-        void onFilterSelected(FilterItem filterItem);
+        void onFilterSelected(FilterModel filterModel);
     }
 
     @Nullable
@@ -45,23 +41,23 @@ public class FilterFragment extends BaseFeatureFragment<FilterContract.Presenter
     }
 
     public void setSelect(int select) {
-        ((FilterRVAdapter)rv.getAdapter()).setSelect(select);
+        ((FilterRVAdapter) rv.getAdapter()).setSelect(select);
     }
 
     public void setSelectItem(String fileName) {
-        ((FilterRVAdapter)rv.getAdapter()).setSelectItem(fileName);
+        ((FilterRVAdapter) rv.getAdapter()).setSelectItem(fileName);
     }
 
     @Override
-    public void onItemClick(FilterItem filterItem) {
+    public void onItemClick(FilterModel filterModel) {
         if (getCallback() == null) {
             return;
         }
-        getCallback().onFilterSelected(filterItem);
+        getCallback().onFilterSelected(filterModel);
     }
 
     @Override
     public void onClose() {
-        ((FilterRVAdapter)rv.getAdapter()).setSelect(0);
+        ((FilterRVAdapter) rv.getAdapter()).setSelect(0);
     }
 }

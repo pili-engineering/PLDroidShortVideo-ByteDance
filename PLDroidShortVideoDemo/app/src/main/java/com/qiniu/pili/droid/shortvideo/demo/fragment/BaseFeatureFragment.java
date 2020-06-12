@@ -1,6 +1,5 @@
 package com.qiniu.pili.droid.shortvideo.demo.fragment;
 
-
 import com.qiniu.pili.droid.shortvideo.demo.base.BaseFragment;
 import com.qiniu.pili.droid.shortvideo.demo.base.IPresenter;
 

@@ -63,7 +63,7 @@ public class MakeupOptionFragment extends BaseFeatureFragment<ItemGetContract.Pr
         if (getCallback() == null) {
             return;
         }
-        getCallback().onOptionSelect(item, ((ButtonViewRVAdapter)rv.getAdapter()).getSelect());
+        getCallback().onOptionSelect(item, ((ButtonViewRVAdapter) rv.getAdapter()).getSelect());
     }
 
     interface IMakeupOptionCallback {
@@ -72,7 +72,8 @@ public class MakeupOptionFragment extends BaseFeatureFragment<ItemGetContract.Pr
 
         /**
          * 点击某一项之后，回调给 EffectFragment 处理
-         * @param item 点击项的 item
+         *
+         * @param item   点击项的 item
          * @param select 点击项所处位置
          */
         void onOptionSelect(ButtonItem item, int select);

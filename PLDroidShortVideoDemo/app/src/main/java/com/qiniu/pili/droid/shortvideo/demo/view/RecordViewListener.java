@@ -86,7 +86,7 @@ public interface RecordViewListener extends RecordSpeedView.RecordSpeedViewListe
      * @param key 节点 key 值
      * @param value 节点强度
      */
-    void onUpdateComposeNodeIntensity(String key,float value);
+    void onUpdateComposeNodeIntensity(final String path, final String key, final float value);
 
     /**
      * 滤镜选择事件

@@ -13,7 +13,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
 public class ButtonViewRVAdapter extends SelectRVAdapter<ButtonViewRVAdapter.ViewHolder> {
     private List<ButtonItem> mItemList;
     private OnItemClickListener mListener;
@@ -75,8 +74,7 @@ public class ButtonViewRVAdapter extends SelectRVAdapter<ButtonViewRVAdapter.Vie
     public void onProgress(float progress, int id) {
         for (int i = 0; i < mItemList.size(); i++) {
             if (mItemList.get(i).getNode().getId() == id) {
-                if ((progress > 0 && mPointOnItems.add(i))
-                        || (progress == 0 && mPointOnItems.remove(i))) {
+                if ((progress > 0 && mPointOnItems.add(i)) || (progress == 0 && mPointOnItems.remove(i))) {
                     notifyItemChanged(i);
                 }
             }
