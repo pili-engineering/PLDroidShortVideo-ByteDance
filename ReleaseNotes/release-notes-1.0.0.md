@@ -86,3 +86,4 @@ PLDroidShortVideo-ByteDance 是七牛推出的一款适用于 Android 平台的�
 ```java
 PLShortVideoEnv.init(getApplicationContext());
 ```
+* **此版本仅支持字节跳动资源版本 v3.4.2。**

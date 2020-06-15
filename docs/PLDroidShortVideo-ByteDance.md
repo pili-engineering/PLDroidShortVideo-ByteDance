@@ -249,7 +249,7 @@ public void destroyForSaving()
  * 如果设置为不可叠加，设置动态贴纸特效会覆盖掉 composer 类型特效，但 composer 类型特效不会覆盖动态贴纸特效
  * 需要在渲染线程中调用
  *
- * @param mode ALONE 代表不可叠加，SHARE 代表可叠加
+ * @param mode ALONE 代表不可叠加，SHARE 代表可叠加，默认为可叠加
  * @return 设置是否成功
  */
 public boolean setComposerMode(BytedEffectConstants.ComposerMode mode)
@@ -411,6 +411,7 @@ public int drawFrame(int texId, int texWidth, int texHeight, long timestampNs, L
 ```java
 /**
  * 保存时特效处理
+ * 仅适用于七牛短视频中编辑场景下保存时调用
  *
  * @param texId        纹理
  * @param texWidth     纹理宽度

@@ -1,7 +1,7 @@
-# PLDroidMediaStreaming-ByteDance Release Notes for 2.0.0
+# PLDroidShortVideo-ByteDance Release Notes for 2.0.0
 
 ### 简介
-PLDroidMediaStreaming-ByteDance 是七牛推出的一款适用于 Android 平台的具有高级特效功能的推流 SDK，提供了包括高级美颜、高级滤镜、动态贴纸、水印、SEI 信息发送、录屏、纯音频推流在内的多种功能，支持高度定制以及二次开发。
+PLDroidShortVideo-ByteDance 是七牛推出的一款适用于 Android 平台的具有高级特效功能的短视频 SDK，提供了包括高级美颜、高级滤镜、动态贴纸、水印、断点录制、分段回删、视频编辑、混音特效、本地/云端存储在内的多种功能，支持高度定制以及二次开发。
 
 ### 版本
 - 发布 pldroid-bytedance-effect-2.0.0.jar
@@ -15,5 +15,10 @@ PLDroidMediaStreaming-ByteDance 是七牛推出的一款适用于 Android 平台
 - 优化了 YUV 处理速度
 
 ### 注意事项
-* **pldroid-bytedance-effect-2.0.0.jar 较之前版本接口变动较大，升级请仔细[阅读文档](../docs/PLDroidMediaStreaming-ByteDance.md)与 demo**
-* 建议推流 SDK 选用 v2.4.1.1 及以上的版本
+* **pldroid-bytedance-effect-2.0.0.jar 较之前版本接口变动较大，升级请仔细阅读[文档](../docs/PLDroidShortVideo-ByteDance.md)与 demo。**
+* **此版本仅支持字节跳动资源版本 v3.9.0，如版本不匹配请重新申请资源。**
+* 从 PLDroidShortVideo v3.1.0 版本开始，需要在 Application 中初始化 SDK：
+
+```java
+PLShortVideoEnv.init(getApplicationContext());
+```
