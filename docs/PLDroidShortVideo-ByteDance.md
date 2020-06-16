@@ -80,7 +80,8 @@ dependencies {
 # 4. 快速开始
 ## 4.1 资源的配置处理
 为了方便的获取特效的信息列表，首先应该对字节跳动的资源进行配置处理，分别为高级美颜/微整形/美妆/美体素材（ComposeMakeup.bundle）、高级滤镜素材（FilterResource.bundle）和动态贴纸素材（StickerResource.bundle）配置 config.json 文件与 icons 文件夹。此项配置是为了后面可以通过调用类似于 `getStickerList()` 的方法快速获取特效信息，投放入 Adapter 来生成视图，也是为了可以通过云端下发特效文件和配置文件的方式在不更新 APP 的情况下更新特效资源。  
-由于资源配置的过程较为繁琐，我们为您提供了一个处理脚本，您只需将字节提供的 resource 和 icons 文件夹拷入脚本同级目录，在脚本所在目录下运行脚本即可，具体的使用方式请参见本目录下的 script 文件夹，运行脚本成功后您可更改对应素材文件下的 config.json 文件来修改特效图标、特效名称、特效初始强度甚至特效所在类别等信息。
+
+由于资源配置的过程较为繁琐，我们为您提供了一个处理脚本，您只需将字节提供的 resource 和 icons 文件夹拷入脚本同级目录，在脚本所在目录下运行脚本即可，具体的使用方式请参见上级目录的 ResourceTools 文件夹，运行脚本成功后您可更改对应素材文件下的 config.json 文件来修改特效图标、特效名称、特效初始强度甚至特效所在类别等信息。
 
 ## 4.2 把资源从 assets 拷贝到手机本地目录
 在 Android 开发中携带额外的资源文件通常是会将其放入到 assets 文件夹中，当 apk 安装后会放到 /data/app/*.apk 目录下，以 apk 形式存在，assets 被绑定在 apk 中，并不会解压到 /data/data/YourApp 目录下去，所以我们无法直接获取到 assets 中文件的绝对路径。在进行 sdk 的初始化时和设置特效时都需要传入特效资源的地址，所以在此之前需要将资源从 assets 拷贝到本地目录中，可参考 demo 中的 LoadResourcesTask 类。
@@ -404,8 +405,8 @@ public static void updateEffectsInfo(String resourcePath)
  */
 public int drawFrame(int texId, int texWidth, int texHeight, long timestampNs, List<ProcessType> processTypes, boolean isOES)
 ```
-`processTypes` 参数中存储的应为将纹理转正所需要的处理类型，推流 SDK 回调的纹理会因为摄像头的前后置、横竖屏而回调方向不同的纹理、YUV 数据，例如前置竖屏回调的纹理、YUV 数据是旋转了 90 度并做了竖向镜像的，转正需要经过旋转 270 度并横向镜像处理，使用该方法进行处理时， `processTypes` 应该顺序添加 `ProcessType.ROTATE_270` 与 `ProcessType.FLIPPED_HORIZONTAL` 来对纹理进行转正处理，其它情况请参见 PLDroidMediaStreamingDemo。传入的时间戳的变化速率会影响特效中动画的执行速度。
-在短视频 SDK 的纹理回调中回调的纹理格式取决于您的内置美颜设置和是否添加了内置美颜 so，如开启了内置美颜、且添加内置美颜 so ，则回调的纹理格式为 2D，此处的 isOES 参数为 false。
+`processTypes` 参数中存储的应为将纹理转正所需要的处理类型，短视频 SDK 中回调的纹理方向为竖直镜像，需要的转正操作为竖直镜像，所以 `processTypes` 应该添加一个 `ProcessType.FLIPPED_VERTICAL` 来对纹理进行转正处理。  
+在短视频 SDK 的纹理回调中回调的纹理格式有两种，分别为 2D 和 OES，可通过 setVideoFilterListener 中的 callbackOES 参数指定，默认为 2D，请根据回调的纹理格式改变 ByteDancePlugin.drawFrame 中的 isOES 参数
 
 ## 5.16 保存时处理纹理
 ```java
@@ -436,6 +437,7 @@ SDK 会根据该文件夹下的文件进行鉴权，请确保该文件夹下的�
 # 7. 历史记录
 * 2.0.0
   - 发布 pldroid-bytedance-effect-2.0.0.jar
+  - 发布字节资源 v3.9 处理脚本
   - 发布 libc++_shared.so
   - 升级 libeffect.so
   - 升级 libeffect_proxy.so
