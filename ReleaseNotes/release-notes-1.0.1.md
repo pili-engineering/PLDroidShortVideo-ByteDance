@@ -16,3 +16,4 @@ PLShortVideoEnv.init(getApplicationContext());
 ```
 
 * 从 ByteDancePlugin v1.0.1 开始更改了接入方式，具体使用请参见使用文档和 PLDroidShortVideoDemo。
+* **此版本仅支持字节跳动资源版本 v3.4.2。**

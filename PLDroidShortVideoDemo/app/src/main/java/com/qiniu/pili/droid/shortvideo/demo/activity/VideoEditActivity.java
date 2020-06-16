@@ -35,8 +35,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.qiniu.bytedanceplugin.ByteDancePlugin;
-import com.qiniu.bytedanceplugin.effectsdk.BytedEffectConstants;
-import com.qiniu.bytedanceplugin.utils.ProcessType;
+import com.qiniu.bytedanceplugin.model.ComposerMode;
+import com.qiniu.bytedanceplugin.model.ProcessType;
 import com.qiniu.pili.droid.shortvideo.PLBuiltinFilter;
 import com.qiniu.pili.droid.shortvideo.PLGifWatermarkSetting;
 import com.qiniu.pili.droid.shortvideo.PLImageView;
@@ -48,7 +48,6 @@ import com.qiniu.pili.droid.shortvideo.PLSpeedTimeRange;
 import com.qiniu.pili.droid.shortvideo.PLTextView;
 import com.qiniu.pili.droid.shortvideo.PLVideoEditSetting;
 import com.qiniu.pili.droid.shortvideo.PLVideoFilterListener;
-import com.qiniu.pili.droid.shortvideo.PLVideoPlayerListener;
 import com.qiniu.pili.droid.shortvideo.PLVideoSaveListener;
 import com.qiniu.pili.droid.shortvideo.PLWatermarkSetting;
 import com.qiniu.pili.droid.shortvideo.demo.R;
@@ -65,7 +64,6 @@ import com.qiniu.pili.droid.shortvideo.demo.view.GifSelectorPanel;
 import com.qiniu.pili.droid.shortvideo.demo.view.ImageSelectorPanel;
 import com.qiniu.pili.droid.shortvideo.demo.view.OnStickerOperateListener;
 import com.qiniu.pili.droid.shortvideo.demo.view.PaintSelectorPanel;
-import com.qiniu.pili.droid.shortvideo.demo.view.RecordView;
 import com.qiniu.pili.droid.shortvideo.demo.view.sticker.StickerImageView;
 import com.qiniu.pili.droid.shortvideo.demo.view.sticker.StickerTextView;
 import com.qiniu.pili.droid.shortvideo.demo.view.StrokedTextView;
@@ -81,6 +79,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -133,7 +132,6 @@ public class VideoEditActivity extends AppCompatActivity implements PLVideoSaveL
     private LinearLayout mBottomLayout;
     private EffectFragment mEffectFragment;
     private StickerFragment mStickerFragment;
-    private RecordView.OnCloseListener mWorkingFragment;
 
     private int mFgVolumeBeforeMute = 100;
     private long mMixDuration = 5000; // ms
@@ -218,9 +216,9 @@ public class VideoEditActivity extends AppCompatActivity implements PLVideoSaveL
         initAudioMixSettingDialog();
         initResources();
 
-        mByteDancePlugin = new ByteDancePlugin(this, ByteDancePlugin.PluginType.edit, getExternalFilesDir("assets") + File.separator + "resource");
-        mByteDancePlugin.setComposerMode(BytedEffectConstants.ComposerMode.SHARE);
-        //短视频 SDK 回调的纹理是竖直镜像的，需要竖直镜像处理才能将其转正
+        // 由于此处为编辑场景，需要预览和保存同时进行，所以创建一个编辑类型的特效插件
+        mByteDancePlugin = new ByteDancePlugin(this, ByteDancePlugin.PluginType.edit);
+        // 短视频 SDK 回调的纹理方向是竖直镜像的，需要一个竖直镜像处理将其转正
         mProcessTypes = new ArrayList<>();
         mProcessTypes.add(ProcessType.FLIPPED_VERTICAL);
 
@@ -495,17 +493,19 @@ public class VideoEditActivity extends AppCompatActivity implements PLVideoSaveL
             mShortVideoEditor.startPlayback(new PLVideoFilterListener() {
                 @Override
                 public void onSurfaceCreated() {
-                    mByteDancePlugin.onSurfaceCreated();
+                    String resource = getExternalFilesDir("assets") + File.separator + "resource";
+                    mByteDancePlugin.init(resource);
+                    mByteDancePlugin.recoverEffects();
                 }
 
                 @Override
                 public void onSurfaceChanged(int width, int height) {
-                    mByteDancePlugin.onSurfaceChanged(width, height);
+
                 }
 
                 @Override
                 public void onSurfaceDestroy() {
-                    mByteDancePlugin.onSurfaceDestroy();
+                    mByteDancePlugin.destroy();
                 }
 
                 @Override
@@ -525,8 +525,10 @@ public class VideoEditActivity extends AppCompatActivity implements PLVideoSaveL
                             changeGifVisiable(time);
                         }
                     });
-
-                    return mByteDancePlugin.onDrawFrame(texId, texWidth, texHeight, timestampNs, mProcessTypes, false);
+                    // onDrawFrame 回调的纹理格式有两种，分别为 2D 和 OES，可通过 startPlayback 中的 callbackOES 参数指定，默认为 2D
+                    // 请根据回调的纹理格式改变 ByteDancePlugin.drawFrame 中的 isOES 参数
+                    // 该方法如果处理成功，回调的纹理格式为 2D，否则返回原纹理
+                    return mByteDancePlugin.drawFrame(texId, texWidth, texHeight, timestampNs, mProcessTypes, false);
                 }
             });
             mShortVideoEditorStatus = PLShortVideoEditorStatus.Playing;
@@ -1024,18 +1026,31 @@ public class VideoEditActivity extends AppCompatActivity implements PLVideoSaveL
             // copy mv assets to sdcard
             if (!dir.exists()) {
                 dir.mkdirs();
-                String[] fs = getAssets().list("mvs");
-                for (String file : fs) {
-                    InputStream is = getAssets().open("mvs/" + file);
-                    FileOutputStream fos = new FileOutputStream(new File(dir, file));
+            }
+            String[] fs = getAssets().list("mvs");
+            if (fs == null) {
+                return;
+            }
+            String[] localFileNames = dir.list();
+            ArrayList<String> localFileNameArray = new ArrayList<String>(localFileNames.length);
+            Collections.addAll(localFileNameArray, localFileNames);
+            for (String fileName : fs) {
+                if (localFileNameArray.contains(fileName)) {
+                    continue;
+                }
+                FileOutputStream fos = null;
+                try (InputStream is = getAssets().open("mvs/" + fileName)) {
+                    fos = new FileOutputStream(new File(dir, fileName));
                     byte[] buffer = new byte[1024];
                     int byteCount;
                     while ((byteCount = is.read(buffer)) != -1) {
                         fos.write(buffer, 0, byteCount);
                     }
-                    fos.flush();
-                    is.close();
-                    fos.close();
+                } finally {
+                    if (fos != null) {
+                        fos.flush();
+                        fos.close();
+                    }
                 }
             }
 
@@ -1051,6 +1066,7 @@ public class VideoEditActivity extends AppCompatActivity implements PLVideoSaveL
             mFiltersList.setAdapter(new MVListAdapter(json.getJSONArray("MVs")));
         } catch (Exception e) {
             e.printStackTrace();
+            Log.e(TAG, "copy mv resource error", e);
         }
     }
 
@@ -1123,17 +1139,17 @@ public class VideoEditActivity extends AppCompatActivity implements PLVideoSaveL
                         mPreviewView.queueEvent(new Runnable() {
                             @Override
                             public void run() {
-                                mByteDancePlugin.setComposeNodes(nodes);
+                                mByteDancePlugin.setComposerNodes(nodes);
                             }
                         });
                     }
 
                     @Override
-                    public void updateComposeNodeIntensity(final String key, final float value) {
+                    public void updateComposeNodeIntensity(final String path, final String key, final float value) {
                         mPreviewView.queueEvent(new Runnable() {
                             @Override
                             public void run() {
-                                mByteDancePlugin.updateComposeNode(key, value);
+                                mByteDancePlugin.updateComposerNode(path, key, value);
                             }
                         });
                     }
@@ -1153,7 +1169,7 @@ public class VideoEditActivity extends AppCompatActivity implements PLVideoSaveL
                         mPreviewView.queueEvent(new Runnable() {
                             @Override
                             public void run() {
-                                mByteDancePlugin.updateIntensity(BytedEffectConstants.IntensityType.Filter, value);
+                                mByteDancePlugin.updateFilterIntensity(value);
                             }
                         });
                     }
@@ -1355,17 +1371,17 @@ public class VideoEditActivity extends AppCompatActivity implements PLVideoSaveL
         mShortVideoEditor.save(new PLVideoFilterListener() {
             @Override
             public void onSurfaceCreated() {
-                mByteDancePlugin.onSaveSurfaceCreated();
+                mByteDancePlugin.recoverEffects();
             }
 
             @Override
             public void onSurfaceChanged(int width, int height) {
-                mByteDancePlugin.onSaveSurfaceChanged(width, height);
+
             }
 
             @Override
             public void onSurfaceDestroy() {
-                mByteDancePlugin.onSaveSurfaceDestroy();
+                mByteDancePlugin.destroyForSaving();
             }
 
             @Override
@@ -1378,7 +1394,10 @@ public class VideoEditActivity extends AppCompatActivity implements PLVideoSaveL
                     mSaveWatermarkSetting.setPosition(0.01f, 0.01f);
                 }
                 mShortVideoEditor.updateSaveWatermark(mIsUseWatermark ? mSaveWatermarkSetting : null);
-                return mByteDancePlugin.onSaveFrame(texId, texWidth, texHeight, timestampNs, mProcessTypes, false);
+                // onDrawFrame 回调的纹理格式有两种，分别为 2D 和 OES，可通过 save 中的 callbackOES 参数指定，默认为 2D
+                // 请根据回调的纹理格式改变 ByteDancePlugin.drawFrame 中的 isOES 参数
+                // 该方法如果处理成功，回调的纹理格式为 2D，否则返回原纹理
+                return mByteDancePlugin.drawFrameForSaving(texId, texWidth, texHeight, timestampNs, mProcessTypes, false);
             }
         });
     }

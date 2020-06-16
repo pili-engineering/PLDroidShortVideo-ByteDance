@@ -6,7 +6,6 @@ import com.qiniu.pili.droid.shortvideo.demo.base.BasePresenter;
 import com.qiniu.pili.droid.shortvideo.demo.base.IView;
 import com.qiniu.pili.droid.shortvideo.demo.model.ComposerNode;
 
-
 public interface EffectContract {
 
     interface View extends IView {
@@ -24,5 +23,7 @@ public interface EffectContract {
         abstract public void generateDefaultBeautyNodes(SparseArray<ComposerNode> composerNodeMap);
 
         abstract public boolean hasIntensity(int type);
+
+        abstract public boolean isHairType(int id);
     }
 }

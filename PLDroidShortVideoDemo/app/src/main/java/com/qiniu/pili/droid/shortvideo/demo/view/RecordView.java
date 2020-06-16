@@ -319,8 +319,8 @@ public class RecordView extends RelativeLayout {
                     }
 
                     @Override
-                    public void updateComposeNodeIntensity(String key, float value) {
-                        mListener.onUpdateComposeNodeIntensity(key, value);
+                    public void updateComposeNodeIntensity(String path, String key, float value) {
+                        mListener.onUpdateComposeNodeIntensity(path, key, value);
                     }
 
                     @Override

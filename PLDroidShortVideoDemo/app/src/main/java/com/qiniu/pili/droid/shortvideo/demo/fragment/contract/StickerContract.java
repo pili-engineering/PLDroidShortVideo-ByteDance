@@ -1,7 +1,6 @@
 package com.qiniu.pili.droid.shortvideo.demo.fragment.contract;
 
-
-import com.qiniu.bytedanceplugin.model.StickerItem;
+import com.qiniu.bytedanceplugin.model.StickerModel;
 import com.qiniu.pili.droid.shortvideo.demo.base.BasePresenter;
 import com.qiniu.pili.droid.shortvideo.demo.base.IView;
 
@@ -14,6 +13,6 @@ public interface StickerContract {
     }
 
     abstract class Presenter extends BasePresenter<View> {
-        public abstract List<StickerItem> getStickersItems();
+        public abstract List<StickerModel> getStickersItems();
     }
 }
